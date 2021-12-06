@@ -1,19 +1,25 @@
-import { LinkOutlined } from "@ant-design/icons";
 import { StaticJsonRpcProvider, Web3Provider } from "@ethersproject/providers";
 import { formatEther, parseEther } from "@ethersproject/units";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import { Alert, Button, Card, Col, Input, List, Menu, Row } from "antd";
+import { Alert, Button, Card, Col, List, Menu, Row } from "antd";
 import "antd/dist/antd.css";
 import { useUserAddress } from "eth-hooks";
-import { utils } from "ethers";
 import React, { useCallback, useEffect, useState } from "react";
-import ReactJson from "react-json-view";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
-import StackGrid from "react-stack-grid";
 import Web3Modal from "web3modal";
 import "./App.css";
-import assets from "./assets.js";
-import { Account, Address, AddressInput, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch } from "./components";
+import {
+  Account,
+  Address,
+  AddressInput,
+  Contract,
+  Faucet,
+  GasGauge,
+  Header,
+  LoogieEditor,
+  Ramp,
+  ThemeSwitch,
+} from "./components";
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import {
@@ -27,16 +33,6 @@ import {
   useOnBlock,
   useUserProvider,
 } from "./hooks";
-import { BlockPicker } from 'react-color'
-
-
-const { BufferList } = require("bl");
-// https://www.npmjs.com/package/ipfs-http-client
-const ipfsAPI = require("ipfs-http-client");
-
-const ipfs = ipfsAPI({ host: "ipfs.infura.io", port: "5001", protocol: "https" });
-
-console.log("📦 Assets: ", assets);
 
 /*
     Welcome to 🏗 scaffold-eth !
@@ -62,39 +58,6 @@ const targetNetwork = NETWORKS.localhost; // <------- select your target fronten
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
-
-// EXAMPLE STARTING JSON:
-const STARTING_JSON = {
-  description: "It's actually a bison?",
-  external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-  image: "https://austingriffith.com/images/paintings/buffalo.jpg",
-  name: "Buffalo",
-  attributes: [
-    {
-      trait_type: "BackgroundColor",
-      value: "green",
-    },
-    {
-      trait_type: "Eyes",
-      value: "googly",
-    },
-  ],
-};
-
-// helper function to "Get" from IPFS
-// you usually go content.toString() after this...
-const getFromIPFS = async hashToGet => {
-  for await (const file of ipfs.get(hashToGet)) {
-    console.log(file.path);
-    if (!file.content) continue;
-    const content = new BufferList();
-    for await (const chunk of file.content) {
-      content.append(chunk);
-    }
-    console.log(content);
-    return content;
-  }
-};
 
 // 🛰 providers
 if (DEBUG) console.log("📡 Connecting to Mainnet Ethereum");
@@ -186,11 +149,6 @@ function App(props) {
   useOnBlock(mainnetProvider, () => {
     console.log(`⛓ A new mainnet block is here: ${mainnetProvider._lastBlockNumber}`);
   });
-
-  // Then read your DAI balance like:
-  const myMainnetDAIBalance = useContractReader({ DAI: mainnetDAIContract }, "DAI", "balanceOf", [
-    "0x34aA3F359A9D614239015126635CE7732c18fDF3",
-  ]);
 
   // keep track of a variable from the contract in the local React state:
   const balance = useContractReader(readContracts, "YourCollectible", "balanceOf", [address]);
@@ -375,97 +333,12 @@ function App(props) {
     );
   }
 
-  const [yourJSON, setYourJSON] = useState(STARTING_JSON);
-  const [sending, setSending] = useState();
-  const [ipfsHash, setIpfsHash] = useState();
-  const [ipfsDownHash, setIpfsDownHash] = useState();
-
-  const [downloading, setDownloading] = useState();
-  const [ipfsContent, setIpfsContent] = useState();
 
   const [transferToAddresses, setTransferToAddresses] = useState({});
 
-  const [loadedAssets, setLoadedAssets] = useState();
-  useEffect(() => {
-    const updateYourCollectibles = async () => {
-      const assetUpdate = [];
-      for (const a in assets) {
-        try {
-          /*const forSale = await readContracts.YourCollectible.forSale(utils.id(a));
-          let owner;
-          if (!forSale) {
-            const tokenId = await readContracts.YourCollectible.uriToTokenId(utils.id(a));
-            owner = await readContracts.YourCollectible.ownerOf(tokenId);
-          }
-          assetUpdate.push({ id: a, ...assets[a], forSale, owner });*/
-        } catch (e) {
-          console.log(e);
-        }
-      }
-      setLoadedAssets(assetUpdate);
-    };
-    if (readContracts && readContracts.YourCollectible) updateYourCollectibles();
-  }, [assets, readContracts, transferEvents]);
-
-  const galleryList = [];
-  for (const a in loadedAssets) {
-    console.log("loadedAssets", a, loadedAssets[a]);
-
-    const cardActions = [];
-    if (loadedAssets[a].forSale) {
-      cardActions.push(
-        <div>
-
-          <BlockPicker onChange={(c)=>{console.log("c",c)}}/>
-
-          <Button
-            onClick={() => {
-              console.log("gasPrice,", gasPrice);
-              tx(writeContracts.YourCollectible.mintItem(loadedAssets[a].id, { gasPrice }));
-            }}
-          >
-            Mint
-          </Button>
-        </div>,
-      );
-    } else {
-      cardActions.push(
-        <div>
-          owned by:{" "}
-          <Address
-            address={loadedAssets[a].owner}
-            ensProvider={mainnetProvider}
-            blockExplorer={blockExplorer}
-            minimized
-          />
-        </div>,
-      );
-    }
-
-    galleryList.push(
-      <Card
-        style={{ width: 200 }}
-        key={loadedAssets[a].name}
-        actions={cardActions}
-        title={
-          <div>
-            {loadedAssets[a].name}{" "}
-            <a
-              style={{ cursor: "pointer", opacity: 0.33 }}
-              href={loadedAssets[a].external_url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <LinkOutlined />
-            </a>
-          </div>
-        }
-      >
-        <img style={{ maxWidth: 130 }} src={loadedAssets[a].image} alt="" />
-        <div style={{ opacity: 0.77 }}>{loadedAssets[a].description}</div>
-      </Card>,
-    );
-  }
+  const [mintChubbiness, setMintChubbiness] = useState();
+  const [mintColor, setMintColor] = useState();
+  const [mintMessage, setMintMessage] = useState();
 
   return (
     <div className="App">
@@ -482,7 +355,7 @@ function App(props) {
               }}
               to="/"
             >
-              Gallery
+              Minter
             </Link>
           </Menu.Item>
           <Menu.Item key="/yourcollectibles">
@@ -505,26 +378,6 @@ function App(props) {
               Transfers
             </Link>
           </Menu.Item>
-          <Menu.Item key="/ipfsup">
-            <Link
-              onClick={() => {
-                setRoute("/ipfsup");
-              }}
-              to="/ipfsup"
-            >
-              IPFS Upload
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/ipfsdown">
-            <Link
-              onClick={() => {
-                setRoute("/ipfsdown");
-              }}
-              to="/ipfsdown"
-            >
-              IPFS Download
-            </Link>
-          </Menu.Item>
           <Menu.Item key="/debugcontracts">
             <Link
               onClick={() => {
@@ -545,17 +398,15 @@ function App(props) {
                 and give you a form to interact with it locally
             */}
 
-            <div style={{ maxWidth: 820, margin: "auto", marginTop: 32, paddingBottom: 256 }}>
+            <div style={{ maxWidth: 820, margin: "auto", marginTop: 32, paddingBottom: "2rem" }}>
               <Button onClick={()=>{
-                tx( writeContracts.YourCollectible.mintItem() )
+                tx( writeContracts.YourCollectible.mintItem(`0x${mintColor}`, mintChubbiness, mintMessage) )
               }}>MINT</Button>
             </div>
-
-            <div style={{ maxWidth: 820, margin: "auto", marginTop: 32, paddingBottom: 256 }}>
-              <StackGrid columnWidth={200} gutterWidth={16} gutterHeight={16}>
-                {galleryList}
-              </StackGrid>
-            </div>
+            <LoogieEditor
+              updateColor={(colHex) => setMintColor(colHex.substr(1))}
+              updateChubbiness={setMintChubbiness}
+              updateMessage={setMintMessage}/>
           </Route>
 
           <Route path="/yourcollectibles">
@@ -631,81 +482,6 @@ function App(props) {
                 }}
               />
             </div>
-          </Route>
-
-          <Route path="/ipfsup">
-            <div style={{ paddingTop: 32, width: 740, margin: "auto", textAlign: "left" }}>
-              <ReactJson
-                style={{ padding: 8 }}
-                src={yourJSON}
-                theme="pop"
-                enableClipboard={false}
-                onEdit={(edit, a) => {
-                  setYourJSON(edit.updated_src);
-                }}
-                onAdd={(add, a) => {
-                  setYourJSON(add.updated_src);
-                }}
-                onDelete={(del, a) => {
-                  setYourJSON(del.updated_src);
-                }}
-              />
-            </div>
-
-            <Button
-              style={{ margin: 8 }}
-              loading={sending}
-              size="large"
-              shape="round"
-              type="primary"
-              onClick={async () => {
-                console.log("UPLOADING...", yourJSON);
-                setSending(true);
-                setIpfsHash();
-                const result = await ipfs.add(JSON.stringify(yourJSON)); // addToIPFS(JSON.stringify(yourJSON))
-                if (result && result.path) {
-                  setIpfsHash(result.path);
-                }
-                setSending(false);
-                console.log("RESULT:", result);
-              }}
-            >
-              Upload to IPFS
-            </Button>
-
-            <div style={{ padding: 16, paddingBottom: 150 }}>{ipfsHash}</div>
-          </Route>
-          <Route path="/ipfsdown">
-            <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
-              <Input
-                value={ipfsDownHash}
-                placeHolder="IPFS hash (like QmadqNw8zkdrrwdtPFK1pLi8PPxmkQ4pDJXY8ozHtz6tZq)"
-                onChange={e => {
-                  setIpfsDownHash(e.target.value);
-                }}
-              />
-            </div>
-            <Button
-              style={{ margin: 8 }}
-              loading={sending}
-              size="large"
-              shape="round"
-              type="primary"
-              onClick={async () => {
-                console.log("DOWNLOADING...", ipfsDownHash);
-                setDownloading(true);
-                setIpfsContent();
-                const result = await getFromIPFS(ipfsDownHash); // addToIPFS(JSON.stringify(yourJSON))
-                if (result && result.toString) {
-                  setIpfsContent(result.toString());
-                }
-                setDownloading(false);
-              }}
-            >
-              Download from IPFS
-            </Button>
-
-            <pre style={{ padding: 16, width: 500, margin: "auto", paddingBottom: 150 }}>{ipfsContent}</pre>
           </Route>
           <Route path="/debugcontracts">
             <Contract

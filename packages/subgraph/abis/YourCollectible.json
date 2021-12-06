@@ -230,7 +230,42 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "message",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes3",
+        "name": "_color",
+        "type": "bytes3"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_chubbiness",
+        "type": "uint8"
+      },
+      {
+        "internalType": "string",
+        "name": "_message",
+        "type": "string"
+      }
+    ],
     "name": "mintItem",
     "outputs": [
       {
@@ -282,19 +317,6 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "possibleHash",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
       }
     ],
     "stateMutability": "view",

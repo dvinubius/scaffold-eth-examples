@@ -1,8 +1,8 @@
-# 🏗 scaffold-eth - 🎫 Buyer Mints NFT
+# 🏗 scaffold-eth - 🎫 User-designed Loogie NFT
 
-> (Counterfactual NFT minting example...)
+> (Custom designed Loogie NFT minting example...)
 
-Deployer pays around (0.283719 ETH ~$500 at todays gas and price) for the initial contract but then NFTs are only minted once a buyer wants them. (The buyer of the NFT pays the gas to mint. ~$55)
+Loogie NFTs are paid for by users when they are minted. Color, chubbiness and a short message can be edited by the user via an interactive preview.
 
 ---
 
@@ -12,11 +12,11 @@ required: [Node](https://nodejs.org/dist/latest-v12.x/) plus [Yarn](https://clas
 
 
 ```bash
-git clone https://github.com/austintgriffith/scaffold-eth.git buyer-mints-nft
+git clone https://github.com/austintgriffith/scaffold-eth.git custom-loogie-nft
 
-cd buyer-mints-nft
+cd custom-loogie-nft
 
-git checkout buyer-mints-nft
+git checkout custom-loogie-nft
 ```
 
 ```bash
@@ -34,22 +34,20 @@ yarn start
 > in a second terminal window:
 
 ```bash
-cd simple-nft-example
+cd custom-loogie-nft
 yarn chain
 
 ```
 
 ---
 
-> ✏️ Edit the artwork manifest `artwork.js` with all of your art, then upload it to IPFS:
+
 
 > in a third terminal window:
 
 
 ```bash
-cd simple-nft-example
-
-yarn upload
+cd custom-loogie-nft
 
 yarn deploy
 
@@ -59,16 +57,11 @@ yarn deploy
 
 ---
 
-Your artwork from `artwork.json` (if uploaded and deployed correctly) should show a gallery of possible NFTS to mint:
-
-![image](https://user-images.githubusercontent.com/2653167/110538535-5fe87980-80e1-11eb-83aa-fe2b53f9c277.png)
-
-
 💦 Use the faucet wallet icon in the bottom left of the frontend to give your address **$1000** in testnet ETH.
 
-🎫 Try to "Mint" an NFT:
+🎫 Design and Mint a Loogie NFT:
 
-![image](https://user-images.githubusercontent.com/2653167/110538992-ec933780-80e1-11eb-9d15-aaa7efea698d.png)
+![Screenshot 2021-12-06 at 20 13 08](https://user-images.githubusercontent.com/32189942/144900844-3961842e-6f06-488c-b8e4-596ea25fe32d.png)
 
 
 👛 Open an *incognito* window and navigate to http://localhost:3000 (You'll notice it has a new wallet address).
@@ -113,13 +106,6 @@ Your artwork from `artwork.json` (if uploaded and deployed correctly) should sho
 
 ![image](https://user-images.githubusercontent.com/2653167/109537339-ff6f9180-7a7b-11eb-85b0-46cd72311d12.png)
 
-📝 Triple check your `artwork.json` file and run:
-
-```bash
-
-yarn upload
-
-```
 
 👨‍🎤 Deploy your NFT smart contract:
 
@@ -145,11 +131,11 @@ An instant wallet running on xDAI insired by [xdai.io](https://xdai.io).
 
 #### 🐟 Open Sea
 
-> Add your contract to OpenSea ( create -> submit NFTs -> "or add an existing contract" )
+> Add your contract to OpenSea (  https://testnets.opensea.io/get-listed/step-two  )
 
 (It can take a while before they show up, but here is an example:)
 
-https://testnets.opensea.io/assets/0xc2839329166d3d004aaedb94dde4173651babccf/1
+https://testnets.opensea.io/assets/0xaef88d16092679273065e4a79f6b8ef6c28f1313/1
 
 ---
 
@@ -197,6 +183,4 @@ yarn ipfs
 
 ![image](https://user-images.githubusercontent.com/2653167/109540985-7575f780-7a80-11eb-9ebd-39079cc2eb55.png)
 
-> 👩‍❤️‍👨 Share your public url with a friend and ask them to buy a collectible
-
-![buyerpaysgastomint mov](https://user-images.githubusercontent.com/2653167/110540616-f322ae80-80e3-11eb-9009-41e445fdd0ff.gif)
+> 👩‍❤️‍👨 Share your public url with a friend and ask them to design and mint a loogie

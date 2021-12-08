@@ -173,9 +173,9 @@ function App(props) {
           const tokenId = await readContracts.YourCollectible.tokenOfOwnerByIndex(address, tokenIndex);
           console.log("tokenId", tokenId);
           const tokenURI = await readContracts.YourCollectible.tokenURI(tokenId);
-          const jsonManifestString = atob(tokenURI.substring(29))
+          const jsonManifestString = atob(tokenURI.substring(29));
           console.log("jsonManifestString", jsonManifestString);
-/*
+          /*
           const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
           console.log("ipfsHash", ipfsHash);
 
@@ -189,7 +189,6 @@ function App(props) {
           } catch (e) {
             console.log(e);
           }
-
         } catch (e) {
           console.log(e);
         }
@@ -333,7 +332,6 @@ function App(props) {
     );
   }
 
-
   const [transferToAddresses, setTransferToAddresses] = useState({});
 
   const [mintChubbiness, setMintChubbiness] = useState();
@@ -399,25 +397,30 @@ function App(props) {
             */}
 
             <div style={{ maxWidth: 820, margin: "auto", marginTop: 32, paddingBottom: "2rem" }}>
-              <Button onClick={()=>{
-                tx( writeContracts.YourCollectible.mintItem(`0x${mintColor}`, mintChubbiness, mintMessage) )
-              }}>MINT</Button>
+              <Button
+                onClick={() => {
+                  tx(writeContracts.YourCollectible.mintItem(`0x${mintColor}`, mintChubbiness, mintMessage));
+                }}
+              >
+                MINT
+              </Button>
             </div>
             <LoogieEditor
-              updateColor={(colHex) => setMintColor(colHex.substr(1))}
+              updateColor={colHex => setMintColor(colHex.substr(1))}
               updateChubbiness={setMintChubbiness}
-              updateMessage={setMintMessage}/>
+              updateMessage={setMintMessage}
+            />
           </Route>
 
           <Route path="/yourcollectibles">
-            <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+            <div style={{ minWidth: 640, maxWidth: 800, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <List
                 bordered
                 dataSource={yourCollectibles}
                 renderItem={item => {
                   const id = item.id.toNumber();
 
-                  console.log("IMAGE",item.image)
+                  console.log("IMAGE", item.image);
 
                   return (
                     <List.Item key={id + "_" + item.uri + "_" + item.owner}>

@@ -4,33 +4,15 @@ import { useBalance } from "eth-hooks";
 const { utils } = require("ethers");
 
 /*
-  ~ What it does? ~
-
-  Displays a balance of given address in ether & dollar
-
-  ~ How can I use? ~
-
-  <Balance
-    address={address}
-    provider={mainnetProvider}
-    price={price}
-  />
-
-  ~ If you already have the balance as a bignumber ~
-  <Balance
-    balance={balance}
-    price={price}
-  />
-
-  ~ Features ~
-
-  - Provide address={address} and get balance corresponding to given address
-  - Provide provider={mainnetProvider} to access balance on mainnet or any other network (ex. localProvider)
-  - Provide price={price} of ether and get your balance converted to dollars
+  Based on Balance component from scaffold-eth buidl kit
+  Changed so that 
+  - it can be initialized in etherMode via props.
+  - padding is customizable
+  - in etherMode it also displays the eth symbol
 */
 
-export default function Balance(props) {
-  const [dollarMode, setDollarMode] = useState(true);
+export default function CustomBalance(props) {
+  const [dollarMode, setDollarMode] = useState(!props.etherMode);
 
   const balance = useBalance(props.provider, props.address);
   let floatBalance = parseFloat("0.00");
@@ -51,6 +33,8 @@ export default function Balance(props) {
 
   if (dollarMode) {
     displayBalance = "$" + (floatBalance * price).toFixed(2);
+  } else {
+    displayBalance = "Ξ" + displayBalance;
   }
 
   return (
@@ -58,7 +42,7 @@ export default function Balance(props) {
       style={{
         verticalAlign: "middle",
         fontSize: props.size ? props.size : 24,
-        padding: 8,
+        padding: props.padding ?? 8,
         cursor: "pointer",
       }}
       onClick={() => {

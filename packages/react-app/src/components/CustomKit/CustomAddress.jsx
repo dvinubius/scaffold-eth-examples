@@ -3,37 +3,20 @@ import React from "react";
 import Blockies from "react-blockies";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { useLookupAddress } from "eth-hooks/dapps/ens";
+import "./CustomAddress.css";
 
 // changed value={address} to address={address}
 
 /*
-  ~ What it does? ~
-
-  Displays an address with a blockie image and option to copy address
-
-  ~ How can I use? ~
-
-  <Address
-    address={address}
-    ensProvider={mainnetProvider}
-    blockExplorer={blockExplorer}
-    fontSize={fontSize}
-  />
-
-  ~ Features ~
-
-  - Provide ensProvider={mainnetProvider} and your address will be replaced by ENS name
-              (ex. "0xa870" => "user.eth")
-  - Provide blockExplorer={blockExplorer}, click on address and get the link
-              (ex. by default "https://etherscan.io/" or for xdai "https://blockscout.com/poa/xdai/")
-  - Provide fontSize={fontSize} to change the size of address text
+  Used Address from scaffold-eth buidl kit
+  chaged so that blockie is optional
 */
 
 const { Text } = Typography;
 
 const blockExplorerLink = (address, blockExplorer) => blockExplorer || `https://etherscan.io/address/${address}`;
 
-export default function Address(props) {
+export default function CustomAddress(props) {
   const { currentTheme } = useThemeSwitcher();
   const address = props.value || props.address;
   const ens = useLookupAddress(props.ensProvider, address);
@@ -73,12 +56,19 @@ export default function Address(props) {
     );
   }
 
+  const catchEvent = e => {
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
   return (
-    <span>
-      <span style={{ verticalAlign: "middle" }}>
-        <Blockies seed={address.toLowerCase()} size={8} scale={props.fontSize ? props.fontSize / 7 : 4} />
+    <span style={{ display: "inline-flex", alignItems: "center" }} onClick={catchEvent} className="CustomAddress">
+      <span style={{ display: "inline-flex", alignItems: "center" }}>
+        {!props.noBlockie && (
+          <Blockies seed={address.toLowerCase()} size={8} scale={props.fontSize ? props.fontSize / 7 : 4} />
+        )}
       </span>
-      <span style={{ verticalAlign: "middle", paddingLeft: 5, fontSize: props.fontSize ? props.fontSize : 28 }}>
+      <span style={{ paddingLeft: 5, fontSize: props.fontSize ? props.fontSize : 28 }}>
         {props.onChange ? (
           <Text editable={{ onChange: props.onChange }} copyable={{ text: address }}>
             <a

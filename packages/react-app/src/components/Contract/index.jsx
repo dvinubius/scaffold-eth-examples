@@ -55,6 +55,7 @@ export default function Contract({
   blockExplorer,
   chainId,
   contractConfig,
+  noPadding,
 }) {
   const contracts = useContractLoader(provider, contractConfig, chainId);
   let contract;
@@ -113,7 +114,7 @@ export default function Contract({
   });
 
   return (
-    <div style={{ margin: "auto", width: "70vw" }}>
+    <div style={{ margin: "auto", width: "70vw", paddingBottom: noPadding ? 0 : "8rem" }}>
       <Card
         title={
           <div>

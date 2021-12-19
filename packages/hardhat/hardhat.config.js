@@ -9,7 +9,6 @@ require("@tenderly/hardhat-tenderly");
 require("hardhat-deploy");
 require("hardhat-gas-reporter");
 
-require("@eth-optimism/hardhat-ovm");
 require("@nomiclabs/hardhat-ethers");
 require("@nomiclabs/hardhat-etherscan");
 
@@ -27,9 +26,9 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 //
 // Select the network you want to deploy to here:
 //
-const defaultNetwork = "localhost";
+const defaultNetwork = "rinkeby";
 
-const mainnetGwei = 21;
+const mainnetGwei = 115;
 
 function mnemonic() {
   try {
@@ -205,6 +204,15 @@ module.exports = {
         l2: "localArbitrum",
       },
     },
+    optimism: {
+      url: "https://mainnet.optimism.io",
+      accounts: {
+        mnemonic: mnemonic(),
+      },
+      companionNetworks: {
+        l1: "mainnet",
+      },
+    },
     kovanOptimism: {
       url: "https://kovan.optimism.io",
       accounts: {
@@ -216,11 +224,9 @@ module.exports = {
     },
     localOptimism: {
       url: "http://localhost:8545",
-      gasPrice: 0,
       accounts: {
         mnemonic: mnemonic(),
       },
-      ovm: true,
       companionNetworks: {
         l1: "localOptimismL1",
       },
@@ -488,42 +494,49 @@ task(
   async (_, { ethers }) => {
     const hdkey = require("ethereumjs-wallet/hdkey");
     const bip39 = require("bip39");
-    const mnemonic = fs.readFileSync("./mnemonic.txt").toString().trim();
-    if (DEBUG) console.log("mnemonic", mnemonic);
-    const seed = await bip39.mnemonicToSeed(mnemonic);
-    if (DEBUG) console.log("seed", seed);
-    const hdwallet = hdkey.fromMasterSeed(seed);
-    const wallet_hdpath = "m/44'/60'/0'/0/";
-    const account_index = 0;
-    const fullPath = wallet_hdpath + account_index;
-    if (DEBUG) console.log("fullPath", fullPath);
-    const wallet = hdwallet.derivePath(fullPath).getWallet();
-    const privateKey = "0x" + wallet._privKey.toString("hex");
-    if (DEBUG) console.log("privateKey", privateKey);
-    const EthUtil = require("ethereumjs-util");
-    const address =
-      "0x" + EthUtil.privateToAddress(wallet._privKey).toString("hex");
+    try {
+      const mnemonic = fs.readFileSync("./mnemonic.txt").toString().trim();
+      if (DEBUG) console.log("mnemonic", mnemonic);
+      const seed = await bip39.mnemonicToSeed(mnemonic);
+      if (DEBUG) console.log("seed", seed);
+      const hdwallet = hdkey.fromMasterSeed(seed);
+      const wallet_hdpath = "m/44'/60'/0'/0/";
+      const account_index = 0;
+      const fullPath = wallet_hdpath + account_index;
+      if (DEBUG) console.log("fullPath", fullPath);
+      const wallet = hdwallet.derivePath(fullPath).getWallet();
+      const privateKey = "0x" + wallet._privKey.toString("hex");
+      if (DEBUG) console.log("privateKey", privateKey);
+      const EthUtil = require("ethereumjs-util");
+      const address =
+        "0x" + EthUtil.privateToAddress(wallet._privKey).toString("hex");
 
-    const qrcode = require("qrcode-terminal");
-    qrcode.generate(address);
-    console.log("‍📬 Deployer Account is " + address);
-    for (const n in config.networks) {
-      // console.log(config.networks[n],n)
-      try {
-        const provider = new ethers.providers.JsonRpcProvider(
-          config.networks[n].url
-        );
-        const balance = await provider.getBalance(address);
-        console.log(" -- " + n + " --  -- -- 📡 ");
-        console.log("   balance: " + ethers.utils.formatEther(balance));
-        console.log(
-          "   nonce: " + (await provider.getTransactionCount(address))
-        );
-      } catch (e) {
-        if (DEBUG) {
-          console.log(e);
+      const qrcode = require("qrcode-terminal");
+      qrcode.generate(address);
+      console.log("‍📬 Deployer Account is " + address);
+      for (const n in config.networks) {
+        // console.log(config.networks[n],n)
+        try {
+          const provider = new ethers.providers.JsonRpcProvider(
+            config.networks[n].url
+          );
+          const balance = await provider.getBalance(address);
+          console.log(" -- " + n + " --  -- -- 📡 ");
+          console.log("   balance: " + ethers.utils.formatEther(balance));
+          console.log(
+            "   nonce: " + (await provider.getTransactionCount(address))
+          );
+        } catch (e) {
+          if (DEBUG) {
+            console.log(e);
+          }
         }
       }
+    } catch (err) {
+      console.log(`--- Looks like there is no mnemonic file created yet.`);
+      console.log(
+        `--- Please run ${chalk.greenBright("yarn generate")} to create one`
+      );
     }
   }
 );

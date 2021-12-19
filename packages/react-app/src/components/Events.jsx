@@ -1,6 +1,7 @@
-import { List } from "antd";
+import { List, Input, Descriptions } from "antd";
 import { useEventListener } from "eth-hooks/events/useEventListener";
 import { Address } from "../components";
+const { TextArea } = Input;
 
 /*
   ~ What it does? ~
@@ -30,10 +31,19 @@ export default function Events({ contracts, contractName, eventName, localProvid
         bordered
         dataSource={events}
         renderItem={item => {
+          const { blockNumber, event, eventSignature, args } = item;
           return (
             <List.Item key={item.blockNumber + "_" + item.args.sender + "_" + item.args.purpose}>
-              <Address address={item.args[0]} ensProvider={mainnetProvider} fontSize={16} />
-              {item.args[1]}
+              <Descriptions bordered number={1} size="small" title={`${event}`}>
+                <Descriptions.Item label="block" span={2} style={{fontSize: "0.85rem"}}>{blockNumber}</Descriptions.Item>
+                <Descriptions.Item label="signature" span={3} style={{fontSize: "0.85rem"}}>{eventSignature}</Descriptions.Item>
+                <Descriptions.Item label="args" span={3}>
+                  <List>
+                    {args.map(a =>
+                      <List.Item style={{fontSize: "0.85rem", padding: "0.25rem 2rem"}}>{a.toString()}</List.Item>)}
+                  </List>
+                </Descriptions.Item>
+              </Descriptions>
             </List.Item>
           );
         }}

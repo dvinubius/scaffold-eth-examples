@@ -1,6 +1,12 @@
-# 🏗 Scaffold-ETH
+# 🏗 Scaffold-ETH *Factory Setup*
 
 > everything you need to build on Ethereum! 🚀
+>
+> ## Contract Factory
+> Solidity code & React code are set up to
+> - create contracts
+> - browse created contracts
+> - interact with created contracts
 
 🧪 Quickly experiment with Solidity using a frontend that adapts to your smart contract:
 
@@ -9,12 +15,14 @@
 
 # 🏄‍♂️ Quick Start
 
+### Manual setup
+
 Prerequisites: [Node](https://nodejs.org/en/download/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
 
 > clone/fork 🏗 scaffold-eth:
 
 ```bash
-git clone https://github.com/austintgriffith/scaffold-eth.git
+git clone https://github.com/scaffold-eth/scaffold-eth.git
 ```
 
 > install and start your 👷‍ Hardhat chain:
@@ -39,6 +47,8 @@ cd scaffold-eth
 yarn deploy
 ```
 
+🌍 You need an RPC key for production deployments/Apps, create an [Alchemy](https://www.alchemy.com/) account and replace the value of `ALCHEMY_KEY = xxx` in `packages/react-app/src/constants.js`
+
 🔏 Edit your smart contract `YourContract.sol` in `packages/hardhat/contracts`
 
 📝 Edit your frontend `App.jsx` in `packages/react-app/src`
@@ -46,6 +56,12 @@ yarn deploy
 💼 Edit your deployment scripts in `packages/hardhat/deploy`
 
 📱 Open http://localhost:3000 to see the app
+
+### Automated with Gitpod
+
+To deploy this project to Gitpod, click this button:
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#github.com/scaffold-eth/scaffold-eth)
 
 # 📚 Documentation
 

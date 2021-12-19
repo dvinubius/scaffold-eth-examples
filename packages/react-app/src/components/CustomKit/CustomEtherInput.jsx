@@ -1,35 +1,13 @@
 import { Input } from "antd";
 import React, { useEffect, useState } from "react";
 
-// small change in useEffect, display currentValue if it's provided by user
-
 /*
-  ~ What it does? ~
-
-  Displays input field for ETH/USD amount, with an option to convert between ETH and USD
-
-  ~ How can I use? ~
-
-  <EtherInput
-    autofocus
-    price={price}
-    value=100
-    placeholder="Enter amount"
-    onChange={value => {
-      setAmount(value);
-    }}
-  />
-
-  ~ Features ~
-
-  - Provide price={price} of ether and easily convert between USD and ETH
-  - Provide value={value} to specify initial amount of ether
-  - Provide placeholder="Enter amount" value for the input
-  - Control input change by onChange={value => { setAmount(value);}}
+  Based on EtherInput from scaffold-eth buidl kit
+  Changed so that it can be initialized with etherMode via props
 */
 
-export default function EtherInput(props) {
-  const [mode, setMode] = useState(props.price ? "USD" : "ETH");
+export default function CustomEtherInput(props) {
+  const [mode, setMode] = useState(props.etherMode ? "ETH" : props.price ? "USD" : "ETH");
   const [display, setDisplay] = useState();
   const [value, setValue] = useState();
 
@@ -80,7 +58,7 @@ export default function EtherInput(props) {
             const ethValue = possibleNewValue / props.price;
             setValue(ethValue);
             if (typeof props.onChange === "function") {
-              props.onChange(ethValue);
+              props.onChange(ethValue, mode);
             }
             setDisplay(newValue);
           } else {
@@ -89,7 +67,7 @@ export default function EtherInput(props) {
         } else {
           setValue(newValue);
           if (typeof props.onChange === "function") {
-            props.onChange(newValue);
+            props.onChange(newValue, mode);
           }
           setDisplay(newValue);
         }

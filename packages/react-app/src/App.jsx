@@ -275,7 +275,7 @@ function App(props) {
       />
       <Menu style={{ display: "flex", justifyContent: "center" }} selectedKeys={[location.pathname]} mode="horizontal">
         <Menu.Item key="/">
-          <Link to="/">Stakers</Link>
+          <Link to="/">Your Contracts</Link>
         </Menu.Item>
         <Menu.Item key="/debug">
           <Link to="/debug">Debug Contracts</Link>

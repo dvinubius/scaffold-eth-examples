@@ -1,5 +1,5 @@
 WIP
-Differs from the openzeppelin factory branch:
+Differs from the proxy-factory branch:
 
 
 solidity --- factory vanilla, not via openzeppelin clone

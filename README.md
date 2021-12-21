@@ -1,3 +1,18 @@
+WIP
+Differs from the openzeppelin factory branch:
+
+
+solidity --- factory vanilla, not via openzeppelin clone
+
+frontend --- load all created contracts:
+- use creation events
+- => only one rpc request
+
+frontend --- read/write created contracts: 
+
+- automated ABI injection on deploy
+- better integration with our current hooks
+
 # 🏗 Scaffold-ETH *Factory Setup*
 
 > everything you need to build on Ethereum! 🚀

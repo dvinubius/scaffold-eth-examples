@@ -1,4 +1,4 @@
-import { Button, Card, Spin } from "antd";
+import { Button, Card, Divider, Spin } from "antd";
 import { useContractLoader, useContractReader } from "eth-hooks";
 
 import React, { useState } from "react";
@@ -7,17 +7,17 @@ import deployedContracts from "../../contracts/hardhat_contracts.json";
 import { injectContract } from "../../helpers/injectContractConfig";
 import { cardGradient, mainColWidth, primaryColor } from "../../styles";
 import { Transactor } from "../../helpers";
-import { Address } from "..";
 import CustomAddress from "../CustomKit/CustomAddress";
+import CustomEvents from "../CustomKit/CustomEvents";
 
 const YourContract = ({ contract, injectableAbis, localProvider, userSigner, localChainId, gasPrice }) => {
   // The transactor wraps transactions and provides notificiations
   const tx = Transactor(userSigner, gasPrice);
 
   /**
-   * contractConfig not from props, but we create it locally
-   * because injecting the Staker is a side effect you
-   * may not want to be felt outside this component
+   * contractConfig not from props, but we create it locally,
+   * so that YourContract has the address of the particular contract
+   * instance this component is displaying
    */
   const contractConfig = { deployedContracts: deployedContracts || {}, externalContracts: externalContracts || {} };
   injectContract({
@@ -104,34 +104,44 @@ const YourContract = ({ contract, injectableAbis, localProvider, userSigner, loc
               <div style={{ fontSize: "1rem" }}>
                 Purpose: <span style={{ color: primaryColor }}>{purpose}</span>
               </div>
-              <Button
-                size="medium"
-                loading={pendingPurposeChange}
-                type="default"
-                onClick={() => {
-                  setPendingPurposeChange(true);
-                  tx(writeContracts.YourContract.setPurpose("🧑‍💻 Code 24/7"), update => {
-                    if (update && (update.error || update.reason)) {
-                      setPendingPurposeChange(false);
-                    }
-                    if (update && (update.status === "confirmed" || update.status === 1)) {
-                      setPendingPurposeChange(false);
-                      forceUpdate();
-                    }
-                    if (update && update.code) {
-                      // metamask error
-                      // may be that user denied transaction, but also actual errors
-                      // handle them particularly if you need to
-                      // https://github.com/MetaMask/eth-rpc-errors/blob/main/src/error-constants.ts
-                      setPendingPurposeChange(false);
-                    }
-                  });
-                }}
-              >
-                {`Change to 🧑‍💻 Code 24/7`}
-              </Button>
+              {["🧑‍💻 Code 24/7", "🧘‍♀️ Relax"].map(purpose => (
+                <Button
+                  size="medium"
+                  loading={pendingPurposeChange}
+                  type="default"
+                  onClick={() => {
+                    setPendingPurposeChange(true);
+                    tx(writeContracts.YourContract.setPurpose(purpose), update => {
+                      if (update && (update.error || update.reason)) {
+                        setPendingPurposeChange(false);
+                      }
+                      if (update && (update.status === "confirmed" || update.status === 1)) {
+                        setPendingPurposeChange(false);
+                        forceUpdate();
+                      }
+                      if (update && update.code) {
+                        // metamask error
+                        // may be that user denied transaction, but also actual errors
+                        // handle them particularly if you need to
+                        // https://github.com/MetaMask/eth-rpc-errors/blob/main/src/error-constants.ts
+                        setPendingPurposeChange(false);
+                      }
+                    });
+                  }}
+                >
+                  {`Change to ${purpose}`}
+                </Button>
+              ))}
             </div>
           )}
+          {/* <Divider />
+          <CustomEvents
+            contractName="YourContract"
+            contracts={readContracts}
+            eventName="SetPurpose"
+            localProvider={localProvider}
+            startBlock={1}
+          /> */}
         </div>
       </Card>
     </div>

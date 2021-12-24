@@ -18,14 +18,14 @@ contract YourContractFactory {
     constructor() {}
 
     /**
-        @param name for better UX on the frontend
+        @param name for better frontend UX
         @param purpose the purpose
      */
     function createYourContract(string memory name, string memory purpose)
         public
     {
         uint256 id = yourContracts.length;
-        YourContract yc = new YourContract(name, purpose);
+        YourContract yc = new YourContract(purpose);
 
         // technically, the factory created the contract and became the owner
         // you probably don't want it to remain the owner => transfer ownership

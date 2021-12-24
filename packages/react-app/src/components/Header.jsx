@@ -11,11 +11,7 @@ export default function Header() {
       target="_blank"
       rel="noopener noreferrer"
     >
-      <PageHeader
-        title="🏗 scaffold-eth"
-        subTitle="Industrial Version: create, browse, interact with contracts"
-        style={{ cursor: "pointer" }}
-      />
+      <PageHeader title="🏗 scaffold-eth" subTitle="Scaffold-Eth Factory Setup" style={{ cursor: "pointer" }} />
     </a>
   );
 }

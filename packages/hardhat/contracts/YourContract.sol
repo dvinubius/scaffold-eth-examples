@@ -8,16 +8,13 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract YourContract is Ownable {
     // event SetPurpose(address sender, string purpose);
-
-    string public name;
     string public purpose;
 
-    constructor(string memory _name, string memory _purpose) {
-        name = _name;
+    constructor(string memory _purpose) {
         purpose = _purpose;
     }
 
-    function setPurpose(string memory newPurpose) public {
+    function setPurpose(string memory newPurpose) public onlyOwner {
         purpose = newPurpose;
         console.log(msg.sender, "set purpose to", purpose);
         // emit SetPurpose(msg.sender, purpose);

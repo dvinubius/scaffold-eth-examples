@@ -1,5 +1,3 @@
-// deploy/01_deploy_staker.js
-
 const { ethers } = require("hardhat");
 
 module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {

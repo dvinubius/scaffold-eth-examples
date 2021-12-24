@@ -1,10 +1,12 @@
+import React from "react";
 import { LeftOutlined } from "@ant-design/icons";
 import { Button, Divider } from "antd";
 import { useState } from "react";
-import AllYourContracts from "../components/Factory/AllYourContracts";
 import CreateYourContract from "../components/Factory/CreateYourContract";
 import YourContract from "../components/YourContract/YourContract";
 import { mainColWidth, mediumButtonMinWidth } from "../styles";
+import StackGrid from "react-stack-grid";
+import ContractItem from "../components/Factory/ContractItem";
 
 const CreatedContractsUI = ({
   factoryAddress,
@@ -59,9 +61,24 @@ const CreatedContractsUI = ({
       {!openedContract && <Divider style={{ margin: "2rem 0" }}>Your Contracts</Divider>}
       {openedContract && <Divider style={{ margin: "44px 0" }} />}
       {/* CONTENT */}
-      {!openedContract && createdContracts && createdContracts.length > 0 && (
+      {!openedContract && createdContracts && createdContracts.length > 0 && injectableAbis && (
         <div style={{ alignSelf: "stretch" }}>
-          <AllYourContracts contracts={createdContracts} openContract={handleOpenContract} />
+          <div style={{ width: "28rem", margin: "auto" }}>
+            <StackGrid columnWidth="100%" gutterHeight={16}>
+              {createdContracts.map(c => (
+                <div key={c.address}>
+                  <ContractItem
+                    openContract={handleOpenContract}
+                    contract={c}
+                    abi={injectableAbis.YourContract}
+                    localChainId={localChainId}
+                    localProvider={localProvider}
+                    userAddress={userSigner.address}
+                  />
+                </div>
+              ))}
+            </StackGrid>
+          </div>
         </div>
       )}
       {openedContract && injectableAbis && (

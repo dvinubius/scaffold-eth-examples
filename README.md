@@ -184,7 +184,7 @@ SCREENSHOT
 
 > Lets show our users when and how purpose changes happen!
 
-Find the solidity code that refers to SetPurpose events. Uncomment it.
+Find the Solidity code related to SetPurpose events. Uncomment it.
 
 Redeploy with ```yarn deploy --reset```
 
@@ -192,7 +192,7 @@ Find the React code that displays SetPurpose events in ```<YourContract/>```. It
 
 Create a new contract. Change its purpose.
 
-> Now, for any particular YourContract, our app
+> Now, for any particular instance of YourContract, our app
 > - displays contract events
 > - displays contract state
 > - enables contract interaction

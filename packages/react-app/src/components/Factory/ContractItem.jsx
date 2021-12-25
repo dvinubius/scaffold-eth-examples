@@ -12,14 +12,39 @@ const ContractItem = ({ openContract, contract, abi, localChainId, localProvider
    * contractConfig not from props,
    * we create a copy in which we inject this particular contract
    **/
-  const contractConfig = getContractConfigWithInjected("YourContract", abi, contract.address, localChainId);
+  // const contractConfig = getContractConfigWithInjected("YourContract", abi, contract.address, localChainId);
+  // const readContracts = useContractLoader(localProvider, contractConfig);
+  // const owner = useContractReader(readContracts, "YourContract", "owner");
+  // console.log("owner:", owner);
 
-  const readContracts = useContractLoader(localProvider, contractConfig);
-  const owner = useContractReader(readContracts, "YourContract", "owner");
-  const isOwnedByCurrentUser = owner === userAddress;
-  console.log("owner:", owner);
+  // const ownerMark =
+  //   owner === userAddress ? (
+  //     <div
+  //       style={{
+  //         position: "absolute",
+  //         right: "1rem",
+  //         top: "50%",
+  //         transform: "translateY(calc(-50% - 2px))",
+  //       }}
+  //     >
+  //       <UserOutlined
+  //         style={{
+  //           color: primaryColor,
+  //           background: "hsla(209deg, 100%, 92%, 1)",
+  //           borderRadius: "50%",
+  //           width: "1.25rem",
+  //           height: "1.25rem",
+  //           display: "flex",
+  //           alignItems: "center",
+  //           justifyContent: "center",
+  //           border: `1px solid ${primaryColor}`,
+  //         }}
+  //       />
+  //     </div>
+  //   ) : (
+  //     ""
+  //   );
 
-  // const isOwnedByCurrentUser = false;
   const cellHeight = "2.5rem";
   return (
     <Card
@@ -70,7 +95,7 @@ const ContractItem = ({ openContract, contract, abi, localChainId, localProvider
           >
             <CustomAddress fontSize={14} value={contract.creator} />
           </Descriptions.Item>
-          <Descriptions.Item
+          {/* <Descriptions.Item
             label="Owner"
             labelStyle={{ color: softTextColor, width: "8rem" }}
             contentStyle={{
@@ -85,31 +110,10 @@ const ContractItem = ({ openContract, contract, abi, localChainId, localProvider
             span={3}
           >
             <CustomAddress fontSize={14} value={owner} />
-            {isOwnedByCurrentUser && (
-              <div
-                style={{
-                  position: "absolute",
-                  right: "1rem",
-                  top: "50%",
-                  transform: "translateY(calc(-50% - 2px))",
-                }}
-              >
-                <UserOutlined
-                  style={{
-                    color: primaryColor,
-                    background: "hsla(209deg, 100%, 92%, 1)",
-                    borderRadius: "50%",
-                    width: "1.25rem",
-                    height: "1.25rem",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: `1px solid ${primaryColor}`,
-                  }}
-                />
-              </div>
-            )}
-          </Descriptions.Item>
+            {
+              // ownerMark
+            }
+          </Descriptions.Item> */}
         </Descriptions>
       </div>
     </Card>

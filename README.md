@@ -19,6 +19,10 @@
 
 <img src="https://user-images.githubusercontent.com/32189942/147391738-36904823-7dbc-4e61-b9e8-ccea1f7abaf6.png" width="680">
 
+𝌋 Debug created contracts with a simil master-detail UI
+
+<img src="https://user-images.githubusercontent.com/32189942/147391972-3166a735-f5c8-4a04-8b50-778e13c5f020.png" width="650">
+
 
 # 🏄‍♂️ Quick Start
 
@@ -103,12 +107,10 @@ Open a new browser window in incognito mode, go to [localhost:3000](http://local
 
 Here you won't be able to change the purpose of existing contracts. In this incognito window you are someone else (notice the address at the top of the window). The current signer is not the owner of those contracts.
 
-> 𝌋 A similar master-detail navigation is available in the **Debug UI**
-
-<img src="https://user-images.githubusercontent.com/32189942/147391972-3166a735-f5c8-4a04-8b50-778e13c5f020.png" width="650">
+> 𝌋 The **Debug UI** enables raw interaction with the factory and any created contract instance.
 
 🧐 Check out the "Debug Contracts" tab.
-- See what the public functions of YourContractFactory allow you to do. Are they useful?
+- See what the public functions of YourContractFactory allow you to do. Do you find them useful?
 - What else might be useful to have in there?
 
 > ** 👩‍💻 😍  **UX** 😍 🧑‍💻 Frontend Side Quest  - Improve UX when setting the purpose **

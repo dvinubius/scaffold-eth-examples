@@ -180,7 +180,7 @@ SCREENSHOT
 > 
 > But in our **factory setup**, the ``YourContract`` instances are **created on-chain** and can have any address. So ```yarn deploy``` just makes the **abi** of YourContract available to the frontend by putting it into the file above. Later it can be injected at runtime in combination with a specific address.
 
-## **Challenge 1** : Track purpose changes
+## **Challenge** 1 : Track purpose changes
 
 > Lets show our users when and how purpose changes happen!
 
@@ -206,9 +206,11 @@ Our factory ensures that the user who creates a contract also becomes the owner
 SCREENSHOT
 
 Without this code, the factory would remain the owner of all YourContract instances.
-## **Challenge 2** Contract details in the master view
 
-> 👩‍💻 😍 **UX** 😍 🧑‍💻 
+# 3. 👩‍💻 😍 🧑‍💻 UX CHALLENGES
+
+## **Challenge** 2 -- Contract details in the list item
+ 
 > Suppose we wanted to **display the owner** of any contract in the master view. Probably your users want to easily identify the contracts they've created.
 
 (SCREENSHOT)
@@ -223,35 +225,39 @@ Go to ```ContractItem.jsx``` and find the code that fetches owner data. Uncommen
 
 Now you should see owner information in the contracts list of the master view.
 
-### UX upgrade!
-> 👩‍💻 😍 **UX** 😍 🧑‍💻 Owner addresses are hard quite to read. In the contracts list, let's **highlight** items which belong to **the current user**.
+### 👩‍💻 😍 🧑‍💻 **Recognize** my contract
+> Owner addresses are hard quite to read. In the contracts list, let's **mark** items which belong to **the current user** so they may be identified more easily.
 
-```uncomment some code```
+Go to the code inside the ```<ContractItem/>``` component. Find the commented code which marks the item when the contract owner is the current user. Uncomment it.
 
-### **Challenge 3** : Does it scale?  
+You should now see contract items like this:
+
+
+## **Challenge** 3 : Scalable UI  
 
 > What if there were 100 contracts? 
 > 
-> Would you make 100 requests in the ```<CreatedContractsUI/>```, immediately after it has retrieved the events? 
+> As soon as you get the 100 contract creation events in ```App.jsx```, would you make 100 requests through **all** the ```<ContractItem />``` components?
 
-It's probably better if we retrieve contract state (the owner) only when that particular contract is actually in view.
+It's probably better if we retrieve the owner only when a particular contract list item is actually in view.
 
+Here is a simple solution for that:
 
-### TASK: Add **Pagination** for the contract list 
+### 👩‍💻 😍 🧑‍💻 **Pagination** for the contract list 
 
  
 > - This would improve the UX a lot, whether we display contract owners or not
 > - If you've done item 1, the frontend only retrieves owners of current page
 
-### 3. TASK: Even better UX
+## Side Quests 
 
 
-> ** 🧙‍♂️ 🧝‍♀️ 🧞‍♂️ Frontend Side Quest - Allow users to **filter** contracts by name in the list view **
+> 👩‍💻 😍 🧑‍💻  Allow users to **filter** contracts by name in the list view 
 
 - use an input field
 - how do you combine this with the pagination feature?
   
-> ** 🧙‍♂️ 🧝‍♀️ 🧞‍♂️ Frontend Side Quest - Allow users to **filter** contracts by only listing their own ones **
+> 👩‍💻 😍 🧑‍💻  Allow users to **filter** contracts by only listing their own ones 
 
 - use a switch or checkbox "only mine"
 - how do you combine this with the pagination feature?
@@ -262,9 +268,7 @@ It's probably better if we retrieve contract state (the owner) only when that pa
 Our approaches in solving UX challenges depend on many factors. If your project is going to have lots of complex data to retrieve, you'll probably use a [**subgraph**](https://docs.scaffoldeth.io/scaffold-eth/toolkit/infrastructure/the-graph) or other web3 indexing tools like [Moralis](https://docs.moralis.io/moralis-server/automatic-transaction-sync/smart-contract-events). These are more capable than the ```useEventListener``` hook, which makes basic RCP calls to query specific events.
 ## 2 Factory Use Cases
 
-> There are many use cases for a setup similar to this
-> 
-> Take Uniswap:
+> There are many use cases for a setup similar to ours here. Take **Uniswap**:
 > - users create liquidity pools
 > - each liquidity pool is a separate contract
 > 
@@ -272,7 +276,7 @@ Our approaches in solving UX challenges depend on many factors. If your project 
 
 > ** 🧙‍♂️ 🧝‍♀️ 🧞‍♂️ **Advanced Contract Design** Quest: Dig into the [UniswapV3](https://docs.uniswap.org/protocol/reference/core/UniswapV3Factory) Docs.
 > Here the factory is indeed more tightly coupled to the created pools.
-> - Why do you think is that?
+> - Why, do you think, is that?
 > - How does Uniswap handle fees?
 >   - pool owner fees?
 >   - uniswap fees?

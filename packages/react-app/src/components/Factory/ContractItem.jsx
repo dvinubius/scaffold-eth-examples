@@ -56,7 +56,7 @@ const ContractItem = ({ openContract, contract, abi, localChainId, localProvider
             <div>{contract.time.toLocaleString()}</div>
           </Descriptions.Item>
           <Descriptions.Item
-            label="By"
+            label="Creator"
             labelStyle={{ color: softTextColor }}
             contentStyle={{
               padding: "0 1rem",
@@ -71,8 +71,8 @@ const ContractItem = ({ openContract, contract, abi, localChainId, localProvider
             <CustomAddress fontSize={14} value={contract.creator} />
           </Descriptions.Item>
           <Descriptions.Item
-            label="Current Owner"
-            labelStyle={{ color: softTextColor }}
+            label="Owner"
+            labelStyle={{ color: softTextColor, width: "8rem" }}
             contentStyle={{
               padding: "0 1rem",
               height: cellHeight,

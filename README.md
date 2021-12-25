@@ -1,4 +1,4 @@
-# 🏗 Scaffold-ETH - Dynamic Multi-Contract Starter Kit
+# 🏗 Scaffold-ETH - Dynamic Multi-Contract dApp
 
 > A Starter Kit for dApps where **users** can create and manage multiple contracts
 
@@ -15,9 +15,10 @@
 
 ![image](https://user-images.githubusercontent.com/2653167/124158108-c14ca380-da56-11eb-967e-69cde37ca8eb.png)
 
-🚀 Start with a basic **master-detail UI**, add your functionality
+🚀 Start with a basic **master-detail UI**, customize it for your needs
 
-SCREENSHOT 1 & 2
+<img src="https://user-images.githubusercontent.com/32189942/147391738-36904823-7dbc-4e61-b9e8-ccea1f7abaf6.png" width="680">
+
 
 # 🏄‍♂️ Quick Start
 
@@ -78,17 +79,17 @@ If you're in for the tutorial, you're in for a treat! 🍭 🤓 Here's what we'l
 
 > 🔖 **Create and track** contracts that each have a "purpose" variable
 
-In the "Your Contracts" tab, create a new contract. The dialog keeps the user informed. This is a common UX pattern beyond the generic tx status notifications.
+In the "Your Contracts" tab, create a new contract. The dialog keeps the user informed. This is a **common UX pattern** beyond the generic tx status notifications.
 
-SCREENSHOT 
+<img src="https://user-images.githubusercontent.com/32189942/147391797-3f34eb6a-87cb-4142-9c84-9c311378d5a6.png" width="350">
 
 > 🗺 **Browse** all contracts in a list : ```<CreatedContractsUI/>```
 
 Your new contract should have appeared in the UI. Create a second contract. Observe how the **list updates automatically** as soon as the transaction is mined.
 
-List items only contain data that was available at the moment when the contracts were created.
+List items right now only contain data that was available at the moment when the contracts were **created**.
 
-SCREENSHOT
+<img src="https://user-images.githubusercontent.com/32189942/147391831-ff917ad9-5e1e-4f65-b0a5-afff84a40a39.png" width="400">
 
 > 🕹 **Interact** with any particular contract in a detail view: ```<YourContract/>```
 
@@ -104,23 +105,24 @@ Here you won't be able to change the purpose of existing contracts. In this inco
 
 > 𝌋 A similar master-detail navigation is available in the **Debug UI**
 
-SCREENSHOT
+<img src="https://user-images.githubusercontent.com/32189942/147391972-3166a735-f5c8-4a04-8b50-778e13c5f020.png" width="650">
 
-Check out the "Debug Contracts" tab.
-- See what the factory's public functions offer. Are they useful?
-- What else might be useful in there?
+🧐 Check out the "Debug Contracts" tab.
+- See what the public functions of YourContractFactory allow you to do. Are they useful?
+- What else might be useful to have in there?
 
 > ** 👩‍💻 😍  **UX** 😍 🧑‍💻 Frontend Side Quest  - Improve UX when setting the purpose **
 
 Return to the UI where you have 2 buttons to set the purpose of a contract.
  
-Issue: if you click any of the buttons, both show a spinner while the TX is pending. Not ideal
+**Issue**: if you click any of the buttons, both show a spinner while the TX is pending.
  
-(SCREENSHOT)
+![Screenshot 2021-12-24 at 10 04 25](https://user-images.githubusercontent.com/32189942/147392062-edfcca5a-db7b-4ca0-ba74-d8a612def013.png)
 
-Your challenge: find a way to obtain this behaviour instead
- 
-(SCREENSHOT) 
+**Your challenge**: find a way to obtain this instead
+
+![Screenshot 2021-12-24 at 10 06 45](https://user-images.githubusercontent.com/32189942/147392069-d39470b2-4c9b-47a0-b57d-31e20a5b8107.png)
+
 
 # 2. 🤓 Technicalities
 ### YourContract.sol
@@ -143,44 +145,53 @@ As a starting point for developing dApps with this setup, we want **loose coupli
 
 All our factory needs to know is the addresses of created contracts 
 
-SCREENSHOT
+![Screenshot 2021-12-25 at 21 18 36](https://user-images.githubusercontent.com/32189942/147392127-cfc954b4-9e44-4d22-9456-93a4a7521124.png)
+
+![Screenshot 2021-12-25 at 21 19 33](https://user-images.githubusercontent.com/32189942/147392129-60b10955-8aac-45ca-be60-a804d098fc0f.png)
+
 
 We emit **events on contract creation**, so the frontend can easily retrieve a list of all.
 
-SCREENSHOT
+![Screenshot 2021-12-25 at 21 20 20](https://user-images.githubusercontent.com/32189942/147392136-c64bf671-4ffd-423e-bcf5-1fe76d74a1c5.png)
+![Screenshot 2021-12-25 at 21 19 58](https://user-images.githubusercontent.com/32189942/147392138-d4351c71-f5ec-4d6a-8a09-29f0693a3fdd.png)
 
-We include useful data in those events.
+We've include useful data in those events.
 
 ## 📇 Readable Names
 👩‍💻 😍 **UX** 😍 🧑‍💻 
- In a dApp built like this user-given **individual contract names** are probably a good feature to have. 
+In a dApp based on a setup like ours, user-given **individual contract names** are probably a good feature to have. 
 
-A *simple and cheap* solution is to put the name in the creation event data. If it doesn't need to change over time this works fine.
+We've adopted a *simple and cheap* solution: the user-given name is put in the creation event. If the name doesn't need to change over time this approach works fine.
 
-SCREENSHOT
+This retrieval happens via **a single RPC** call by using the ```useEventListener``` hook.
 
-This retrieval happens via **a single RPC** call made via the ```useEventListener``` hook.
-
-For any more particular / dynamic data, like contract "purpose", contract owner, etc. the frontend uses the contract address to make susequent RPC calls to that particular YourContract instance.
+For **contract state**, like "purpose", contract owner, etc. the frontend uses the address of a particular YourContract intance address to read from the contract, which under the hood makes separate RPC calls.
 
 This is what we do in ```<YourContract/>```
 
-SCREENSHOT
+![Screenshot 2021-12-25 at 21 36 39](https://user-images.githubusercontent.com/32189942/147392368-075e8d90-d875-4758-81f0-8c9202e174f0.png)
+
 
 ## 👨🏻‍💻 🤓  Code Design : Injection! 💉
-> 📝 If you're used to scaffold-eth, notice the pattern: we **dynamically inject** the ```YourContract``` **abi** and the particular contract instance address into a locally created ```contractConfig```. After that it's business as usual with ```useContractLoader```. 
+> 📝 If you're familiar with scaffold-eth, notice the pattern: we **dynamically inject** the ```YourContract``` **abi** and the particular contract instance address into a locally created ```contractConfig```. 
 > 
-> Without the injection there would be no abi at all for ```YourContract``` in the config. Why?
+> After that it's business as usual with ```useContractLoader```. 
 > 
-> Because in our hardhat setup we never deployed ```YourContract```.
+> Without the injection there would be no abi at all for ```YourContract``` in the config. 
+> 
+> Why?
+> 
+> Because **we never deployed** ```YourContract``` in our hardhat setup.
 > 
 > 🧐 Looking more closely you'll notice the file ```react-app/contracts/hardhat_non_deployed_contracts.json``` 
 > 
-> This one is usually not present because we usually include all our contracts when we ```yarn deploy```. They all get fixed deployment addresses there.
+> This one is usually not present because we usually include all our contracts when we ```yarn deploy```. Each one gets a fixed deployment address there.
 > 
-> But in our **factory setup**, the ``YourContract`` instances are **created on-chain** and can have any address. So ```yarn deploy``` just makes the **abi** of YourContract available to the frontend by putting it into the file above. Later it can be injected at runtime in combination with a specific address.
+> But in our **factory setup**, the ``YourContract`` instances are **created on-chain**. Only then they get their addresses, which are stored both in the factory contract state and in the contract creation events. 
+> 
+> So ```yarn deploy```, instead of deploying any particular YourContract, just makes the **abi** of YourContract available to the frontend for later use. It puts it into the json file above. Later it can be injected at runtime in combination with a specific address.
 
-## **Challenge** 1 : Track purpose changes
+## **Challenge** 1 -- Track purpose changes
 
 > Lets show our users when and how purpose changes happen!
 
@@ -197,13 +208,15 @@ Create a new contract. Change its purpose.
 > - displays contract state
 > - enables contract interaction
 
-SCREENSHOT
+<img src="https://user-images.githubusercontent.com/32189942/147393032-18a74fd9-278d-41c9-891c-d1de4f54c79a.png" width="400">
+
 
 ## 🔐 🧑‍💻 🔏 Ownership
 
 Our factory ensures that the user who creates a contract also becomes the owner
 
-SCREENSHOT
+![Screenshot 2021-12-25 at 22 25 29](https://user-images.githubusercontent.com/32189942/147393099-177ff144-d90b-4c67-859d-b608e00279ec.png)
+
 
 Without this code, the factory would remain the owner of all YourContract instances.
 
@@ -213,7 +226,7 @@ Without this code, the factory would remain the owner of all YourContract instan
  
 > Suppose we wanted to **display the owner** of any contract in the master view. Probably your users want to easily identify the contracts they've created.
 
-(SCREENSHOT)
+<img src="https://user-images.githubusercontent.com/32189942/147393199-3131cbac-c3b6-4375-94b7-46d864bcde46.png" width="350">
 
 The owner can change over time, unlike the creator. We can't build this feature by using contract creation event data.
 
@@ -232,14 +245,17 @@ Go to the code inside the ```<ContractItem/>``` component. Find the commented co
 
 You should now see contract items like this:
 
+<img src="https://user-images.githubusercontent.com/32189942/147393220-a71ceded-8c4e-40d5-a191-5bf36d7adab0.png" width="350">
 
-## **Challenge** 3 : Scalable UI  
+☑️ Test the functionality by creating contracts from an incognito window. Compare the views of different users.
+
+## **Challenge** 3 -- Scalable UI  
 
 > What if there were 100 contracts? 
 > 
-> As soon as you get the 100 contract creation events in ```App.jsx```, would you make 100 requests through **all** the ```<ContractItem />``` components?
+> As soon as you receive the creation event data in ```App.jsx```, would you make a total of 100 requests for reading the owner of each contract within its ```<ContractItem />``` component?
 
-It's probably better if we retrieve the owner only when a particular contract list item is actually in view.
+It's probably better if we retrieve the owner of a particular contract item only when the item is actually in view.
 
 Here is a simple solution for that:
 
@@ -247,10 +263,9 @@ Here is a simple solution for that:
 
  
 > - This would improve the UX a lot, whether we display contract owners or not
-> - If you've done item 1, the frontend only retrieves owners of current page
+> - If you allow n contracts per page, only n calls to read the owner will be made at once.
 
-## Side Quests 
-
+## Advanced UX Side Quests 
 
 > 👩‍💻 😍 🧑‍💻  Allow users to **filter** contracts by name in the list view 
 
@@ -265,7 +280,8 @@ Here is a simple solution for that:
 # Final Thoughts
 
 ## 1 Opinionated Solutions
-Our approaches in solving UX challenges depend on many factors. If your project is going to have lots of complex data to retrieve, you'll probably use a [**subgraph**](https://docs.scaffoldeth.io/scaffold-eth/toolkit/infrastructure/the-graph) or other web3 indexing tools like [Moralis](https://docs.moralis.io/moralis-server/automatic-transaction-sync/smart-contract-events). These are more capable than the ```useEventListener``` hook, which makes basic RCP calls to query specific events.
+Our approaches in solving UX challenges depend on many factors. If your project is going to have lots of complex data to retrieve, you'll probably use a [**subgraph**](https://docs.scaffoldeth.io/scaffold-eth/toolkit/infrastructure/the-graph) or other web3 indexing tools like [Moralis](https://docs.moralis.io/moralis-server/automatic-transaction-sync/smart-contract-events). These are more capable than the ```useEventListener``` hook we've used here. This would impact how you approach scaling your dApp.
+
 ## 2 Factory Use Cases
 
 > There are many use cases for a setup similar to ours here. Take **Uniswap**:
@@ -281,11 +297,9 @@ Our approaches in solving UX challenges depend on many factors. If your project 
 >   - pool owner fees?
 >   - uniswap fees?
 
-### Automated with Gitpod
-
-To deploy this project to Gitpod, click this button:
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#github.com/scaffold-eth/scaffold-eth)
+---
+Happy Coding!
+---
 
 # 📚 Documentation
 

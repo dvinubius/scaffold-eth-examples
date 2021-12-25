@@ -2,7 +2,7 @@
 
 > A Starter Kit for dApps where **users** can create and manage multiple contracts
 
-> - 🍦 lean vanilla contract factory 🏭
+> - 🍦 lean vanilla **smart contract factory** 🏭
 > - 💪 use-case flexibility 🌍
 > - 🧐 mini tutorial 🧭  
 

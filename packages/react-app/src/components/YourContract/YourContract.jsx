@@ -4,29 +4,26 @@ import { useContractLoader, useContractReader } from "eth-hooks";
 import React, { useState } from "react";
 import externalContracts from "../../contracts/external_contracts";
 import deployedContracts from "../../contracts/hardhat_contracts.json";
-import { injectContract } from "../../helpers/injectContractConfig";
 import { cardGradient, mainColWidth, primaryColor } from "../../styles";
 import { Transactor } from "../../helpers";
 import CustomAddress from "../CustomKit/CustomAddress";
 import CustomEvents from "../CustomKit/CustomEvents";
+import { getContractConfigWithInjected } from "../../helpers/getContractConfigWithInjected";
 
 const YourContract = ({ contract, injectableAbis, localProvider, userSigner, localChainId, gasPrice }) => {
   // The transactor wraps transactions and provides notificiations
   const tx = Transactor(userSigner, gasPrice);
 
   /**
-   * contractConfig not from props, but we create it locally,
-   * so that YourContract has the address of the particular contract
-   * instance this component is displaying
-   */
-  const contractConfig = { deployedContracts: deployedContracts || {}, externalContracts: externalContracts || {} };
-  injectContract({
-    contractConfig: contractConfig,
-    contractAddress: contract.address,
-    contractName: "YourContract",
-    abi: injectableAbis.YourContract,
+   * contractConfig not from props,
+   * we create a copy in which we inject this particular contract
+   **/
+  const contractConfig = getContractConfigWithInjected(
+    "YourContract",
+    injectableAbis.YourContract,
+    contract.address,
     localChainId,
-  });
+  );
 
   // Load in your local 📝 contract and read a value from it:
   const readContracts = useContractLoader(localProvider, contractConfig);

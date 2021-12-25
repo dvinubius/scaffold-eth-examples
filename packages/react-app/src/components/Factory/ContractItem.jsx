@@ -1,30 +1,19 @@
 import React from "react";
-import { softTextColor, primaryColor, dialogOverlayGradient } from "../../styles";
-import externalContracts from "../../contracts/external_contracts";
-import deployedContracts from "../../contracts/hardhat_contracts.json";
-import { injectContract } from "../../helpers/injectContractConfig";
-import { useContractLoader, useContractReader } from "eth-hooks";
+import { softTextColor, primaryColor } from "../../styles";
+import { useContractReader } from "eth-hooks";
 import { Card, Descriptions } from "antd";
 import CustomAddress from "../CustomKit/CustomAddress";
 import { UserOutlined } from "@ant-design/icons";
+import { useContractLoader } from "../../hooks/custom/useContractLoader";
+import { getContractConfigWithInjected } from "../../helpers/getContractConfigWithInjected";
 
 const ContractItem = ({ openContract, contract, abi, localChainId, localProvider, userAddress }) => {
   /**
-   * contractConfig not from props, but we create it locally,
-   * so that YourContract has the address of the particular contract
-   * instance this component is displaying
-   */
-  const contractConfig = {
-    deployedContracts: deployedContracts || {},
-    externalContracts: externalContracts || {},
-  };
-  injectContract({
-    contractConfig: contractConfig,
-    contractAddress: contract.address,
-    contractName: "YourContract",
-    abi,
-    localChainId,
-  });
+   * contractConfig not from props,
+   * we create a copy in which we inject this particular contract
+   **/
+  const contractConfig = getContractConfigWithInjected("YourContract", abi, contract.address, localChainId);
+
   const readContracts = useContractLoader(localProvider, contractConfig);
   const owner = useContractReader(readContracts, "YourContract", "owner");
   const isOwnedByCurrentUser = owner === userAddress;
@@ -62,7 +51,7 @@ const ContractItem = ({ openContract, contract, abi, localChainId, localProvider
               padding: "0 1rem",
               width: "10rem",
             }}
-            span={4}
+            span={3}
           >
             <div>{contract.time.toLocaleString()}</div>
           </Descriptions.Item>
@@ -77,7 +66,7 @@ const ContractItem = ({ openContract, contract, abi, localChainId, localProvider
               justifyContent: "center",
               width: "100%",
             }}
-            span={4}
+            span={3}
           >
             <CustomAddress fontSize={14} value={contract.creator} />
           </Descriptions.Item>
@@ -93,7 +82,7 @@ const ContractItem = ({ openContract, contract, abi, localChainId, localProvider
               width: "100%",
               position: "relative",
             }}
-            span={4}
+            span={3}
           >
             <CustomAddress fontSize={14} value={owner} />
             {isOwnedByCurrentUser && (

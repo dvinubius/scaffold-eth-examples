@@ -1,7 +1,6 @@
 import { Button, Card, Divider, Space } from "antd";
 import React, { useState } from "react";
 import { Contract } from "../components";
-import { injectContract } from "../helpers/injectContractConfig";
 import externalContracts from "../contracts/external_contracts";
 // contracts
 import deployedContracts from "../contracts/hardhat_contracts.json";
@@ -9,6 +8,7 @@ import ContractDebugHeader from "../components/Debug/ContractDebugHeader";
 import { mediumButtonMinWidth, primaryColor } from "../styles";
 import { LeftOutlined } from "@ant-design/icons";
 import ContractDebug from "../components/Debug/ContractDebug";
+import { getContractConfigWithInjected } from "../helpers/getContractConfigWithInjected";
 
 const DebugUI = ({
   factoryName,
@@ -80,19 +80,15 @@ const DebugUI = ({
             <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
               {createdContracts.map(createdContract => {
                 /**
-                 * define config locally since injection has side effects
-                 */
-                const contractCfg = {
-                  deployedContracts: deployedContracts || {},
-                  externalContracts: externalContracts || {},
-                };
-                injectContract({
-                  contractConfig: contractCfg,
-                  contractAddress: createdContract.address,
-                  contractName: createdContractName,
-                  abi: injectableAbis[createdContractName],
+                 * contractConfig not from props,
+                 * we create a copy in which we inject this particular contract
+                 **/
+                const contractCfg = getContractConfigWithInjected(
+                  createdContractName,
+                  injectableAbis[createdContractName],
+                  createdContract.address,
                   localChainId,
-                });
+                );
 
                 const handleOpen = () =>
                   setOpenedDebugContract({

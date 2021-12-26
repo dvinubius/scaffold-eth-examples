@@ -1,9 +1,6 @@
 import { Button, Card, Divider, Space } from "antd";
 import React, { useState } from "react";
 import { Contract } from "../components";
-import externalContracts from "../contracts/external_contracts";
-// contracts
-import deployedContracts from "../contracts/hardhat_contracts.json";
 import ContractDebugHeader from "../components/Debug/ContractDebugHeader";
 import { mediumButtonMinWidth, primaryColor } from "../styles";
 import { LeftOutlined } from "@ant-design/icons";

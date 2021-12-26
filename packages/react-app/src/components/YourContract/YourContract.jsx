@@ -103,6 +103,7 @@ const YourContract = ({ contract, injectableAbis, localProvider, userSigner, loc
               </div>
               {["🧑‍💻 Code 24/7", "🧘‍♀️ Relax"].map(purpose => (
                 <Button
+                  key={purpose}
                   size="medium"
                   loading={pendingPurposeChange}
                   type="default"

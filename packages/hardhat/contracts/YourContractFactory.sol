@@ -26,12 +26,12 @@ contract YourContractFactory {
     {
         uint256 id = yourContracts.length;
         YourContract yc = new YourContract(purpose);
+        yourContracts.push(address(yc));
 
         // technically, the factory created the contract and became the owner
         // you probably don't want it to remain the owner => transfer ownership
         yc.transferOwnership(msg.sender);
 
-        yourContracts.push(address(yc));
         emit CreateYourContract(
             id,
             address(yc),
